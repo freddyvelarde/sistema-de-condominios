@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\JWT;
 
 class AuthController extends Controller
 {
@@ -27,6 +28,7 @@ class AuthController extends Controller
             if (!$passwordValid) {
                 return response()->json(['message' => 'El password no es correcto'], 200);
             }
+            // JWT::
             return response()->json($res, 200);
         } catch (\Exception $e) {
             // DB::rollBack();
