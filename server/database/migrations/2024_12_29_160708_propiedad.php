@@ -12,9 +12,9 @@ return new class () extends Migration {
             $table->string('numero_propiedad')->unique();
             $table->string('piso');
             $table->integer('num_habitaciones');
-            $table->enum('estado', ['ocupado', 'mantenimiento', 'desocupado']);
-            $table->enum('tipo', ['vivienda', 'oficina', 'local']);
-            $table->foreignId('id_copropietario')->constrained('copropietarios')->cascadeOnDelete();
+            $table->enum('estado', ['ocupado', 'mantenimiento', 'desocupado'])->default('desocupado')->nullable();
+            $table->enum('tipo', ['vivienda', 'oficina', 'local'])->default('vivienda')->nullable();
+            $table->foreignId('id_copropietario')->nullable()->constrained('copropietarios');
             $table->timestamps();
         });
     }

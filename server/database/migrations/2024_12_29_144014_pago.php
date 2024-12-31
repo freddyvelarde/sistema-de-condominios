@@ -11,9 +11,9 @@ return new class () extends Migration {
             $table->id()->primary();
             $table->double('price');
             $table->enum('tipo', ['gasto', 'ingreso']);
-            $table->date('fecha');
+            // $table->date('fecha');
             $table->enum('categoria', ['sueldo', 'mantenimiento', 'servicio', 'reserva', 'cuota']);
-            $table->enum('estado', ['pendiente', 'pagado']);
+            // $table->enum('estado', ['pendiente', 'pagado']);
             $table->enum('metodo', ['qr', 'efectivo']);
             $table->timestamps();
         });

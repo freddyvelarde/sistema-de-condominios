@@ -16,16 +16,16 @@ class Propiedad extends Model
             'piso',
             'num_habitaciones',
             'estado',
-            'tipo'
+            'tipo',
     ];
 
     public function habitantes()
     {
         return $this->hasMany(Habitante::class);
     }
-    public function propietario()
+    public function copropietario()
     {
-        return $this->belongsTo(Copropietario::class);
+        return $this->belongsTo(Copropietario::class, 'id_copropietario');
     }
     public function visitas()
     {

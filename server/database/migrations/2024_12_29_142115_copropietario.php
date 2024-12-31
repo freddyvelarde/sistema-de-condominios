@@ -10,8 +10,10 @@ return new class () extends Migration {
         Schema::create('copropietarios', function (Blueprint $table) {
             $table->id()->primary();
             $table->string('ci');
-            $table->enum('estado', ['activo', 'inactivo']);
+            $table->enum('estado', ['activo', 'inactivo'])->nullable()->default('inactivo');
+            $table->date('fecha_nacimiento')->nullable();
             $table->foreignId('id_usuario')->constrained('datos_usuarios')->cascadeOnDelete();
+            $table->timestamps();
         });
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();

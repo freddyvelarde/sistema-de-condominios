@@ -13,9 +13,9 @@ class Pago extends Model
     protected $fillable = [
         'price',
         'tipo',
-        'fecha',
+        // 'fecha',
         'categoria',
-        'estado',
+        // 'estado',
         'metodo',
     ];
     public function pagoPropiedad()

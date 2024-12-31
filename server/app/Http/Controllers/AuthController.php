@@ -2,47 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Copropietario;
 use App\Models\DatosUsuario;
 use App\Models\Propietario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\JWT;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|string',
-            'email' => 'required|string|email',
-        ]);
-        if ($validator->fails()) {
-            $res = ['message' => 'Error al validar usuario', 'error' => $validator->errors()];
-            return response()->json([$res], 200);
-        }
-        try {
-            $res = DatosUsuario::where('email', $request->email)->first();
-            $passwordValid = Hash::check($request->password, $res->password);
-            if (!$passwordValid) {
-                return response()->json(['message' => 'El password no es correcto'], 200);
-            }
-            // JWT::
-            return response()->json($res, 200);
-        } catch (\Exception $e) {
-            // DB::rollBack();
-            return response()->json([
-                'message' => 'Error creating user',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-
+        $request->validate([
             'password' => 'required|string|min:8',
             'email' => 'required|string|email|unique:datos_usuarios,email',
             'nombres' => 'required|string|max:255',
@@ -53,46 +24,91 @@ class AuthController extends Controller
             'ci' => 'required_if:rol,admin|string',
             'fecha_nacimiento' => 'required_if:rol,admin|date'
         ]);
-        if ($validator->fails()) {
-            $data = [
-                'message' => 'Error al validar usuario',
-                'error' => $validator->errors(),
-            ];
-            return response()->json([$data], 200);
+
+
+        if ($request->rol === 'admin') {
+            if ($request->email !== env('EMAIL_ADMIN1') && $request->email !== env('EMAIL_ADMIN2')) {
+                return response()->json(['message' => "No puedes ser administrador." ]);
+            }
         }
+
+        $user = DatosUsuario::create([
+            'password' => Hash::make($request->password),
+            'email' => $request->email,
+            'nombres' => $request->nombres,
+            'apellido_pat' => $request->apellido_pat,
+            'apellido_mat' => $request->apellido_mat,
+            'num_telefono' => $request->num_telefono,
+            'rol' => $request->rol,
+        ]);
+
+
+
+
+
+        if ($user->rol === 'admin') {
+            Propietario::create([
+                'ci' => $request->ci,
+                // 'fecha_nacimiento' => $request->fecha_nacimiento,
+                'id_usuario' => $user->id
+            ]);
+        }
+        if ($user->rol === 'copropietario') {
+            Copropietario::create([
+                'ci' => $request->ci,
+                // 'fecha_nacimiento' => $request->fecha_nacimiento,
+                'id_usuario' => $user->id
+            ]);
+        }
+
+
+        $token = Auth::login($user);
+
+        return response()->json(['token' => $token, 'user' => $user], 201);
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (!$token = Auth::attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return response()->json(['token' => $token]);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function me()
+    {
+        $user = Auth::user();
+
+
+
+        return response()->json([$user], 200);
+    }
+
+    public function refresh(Request $request)
+    {
+        $refreshToken = $request->input('refresh_token');
 
         try {
+            $newToken = Auth::refresh($refreshToken);
 
-            $usuario = DatosUsuario::create([
-                'password' => Hash::make($request->password),
-                'email' => $request->email,
-                'nombres' => $request->nombres,
-                'apellido_pat' => $request->apellido_pat,
-                'apellido_mat' => $request->apellido_mat,
-                'num_telefono' => $request->num_telefono,
-                'rol' => $request->rol,
-            ]);
-
-            if ($request->rol === 'admin') {
-                Propietario::create([
-                    'ci' => $request->ci,
-                    'fecha_nacimiento' => $request->fecha_nacimiento,
-                    'id_usuario' => $usuario->id,
-                ]);
+            if (!$newToken) {
+                return response()->json(['message' => 'Invalid refresh token'], 401);
             }
 
-
-            return response()->json([
-                'message' => 'User created successfully',
-                'user' => $usuario->load('propietario')
-            ], 201);
+            return response()->json(['access_token' => $newToken]);
 
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'message' => 'Error creating user',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Could not refresh token', 'error' => $e], 500);
         }
     }
+
 }

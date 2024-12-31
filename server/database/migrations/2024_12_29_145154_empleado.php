@@ -9,9 +9,6 @@ return new class () extends Migration {
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id()->primary();
-            // $table->string('nombre');
-            // $table->string('apellido_pat');
-            // $table->string('apellido_mat');
             $table->string('ci');
             $table->date('fecha_nacimiento');
             $table->foreignId('id_usuario')->constrained('datos_usuarios')->cascadeOnDelete();
