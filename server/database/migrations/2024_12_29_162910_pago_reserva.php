@@ -9,9 +9,9 @@ return new class () extends Migration {
     {
         Schema::create('pagos_reservas', function (Blueprint $table) {
             $table->id()->primary();
-            $table->foreignId('id_copropietario')->constrained('copropietarios')->cascadeOnDelete();
-            $table->foreignId('id_reserva')->constrained('reservas')->cascadeOnDelete();
-            $table->foreignId('id_pago')->constrained('pagos')->cascadeOnDelete();
+            $table->foreignId('id_usuario')->constrained('usuarios');
+            $table->foreignId('id_reserva')->constrained('reservas');
+            $table->foreignId('id_pago')->constrained('pagos');
             $table->timestamps();
         });
     }

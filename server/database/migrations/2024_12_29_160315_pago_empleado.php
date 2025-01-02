@@ -9,7 +9,7 @@ return new class () extends Migration {
     {
         Schema::create('pagos_empleados', function (Blueprint $table) {
             $table->id()->primary();
-            $table->foreignId('id_empleado')->constrained('empleados')->cascadeOnDelete();
+            $table->foreignId('id_usuario')->constrained('usuarios');
             $table->foreignId('id_pago')->constrained('pagos')->cascadeOnDelete();
             $table->timestamps();
         });

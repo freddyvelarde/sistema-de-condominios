@@ -11,11 +11,11 @@ class Pago extends Model
 
     protected $table = 'pagos';
     protected $fillable = [
-        'price',
+        'monto',
         'tipo',
         // 'fecha',
         'categoria',
-        // 'estado',
+        'estado',
         'metodo',
     ];
     public function pagoPropiedad()

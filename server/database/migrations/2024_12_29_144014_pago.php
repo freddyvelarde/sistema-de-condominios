@@ -9,11 +9,11 @@ return new class () extends Migration {
     {
         Schema::create('pagos', function (Blueprint $table) {
             $table->id()->primary();
-            $table->double('price');
+            $table->double('monto');
             $table->enum('tipo', ['gasto', 'ingreso']);
             // $table->date('fecha');
             $table->enum('categoria', ['sueldo', 'mantenimiento', 'servicio', 'reserva', 'cuota']);
-            // $table->enum('estado', ['pendiente', 'pagado']);
+            $table->enum('estado', ['pendiente', 'pagado'])->nullable()->default('pendiente');
             $table->enum('metodo', ['qr', 'efectivo']);
             $table->timestamps();
         });

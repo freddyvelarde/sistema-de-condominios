@@ -16,7 +16,7 @@ return new class () extends Migration {
             $table->string('descripcion');
             $table->date('fecha_emision');
             $table->enum('estado', ['activo', 'archivado']);
-            $table->foreignId('id_propietario')->constrained('propietarios')->cascadeOnDelete();
+            $table->foreignId('id_usuario')->constrained('usuarios')->cascadeOnDelete();
             $table->timestamps();
         });
     }

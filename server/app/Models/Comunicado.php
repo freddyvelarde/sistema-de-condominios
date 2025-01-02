@@ -14,10 +14,10 @@ class Comunicado extends Model
         'descripcion',
         'fecha_emision',
         'estado',
-        'id_propietario'
+        'id_usuario'
     ];
     public function propietario()
     {
-        return $this->belongsTo(Propietario::class, 'id_propietario');
+        return $this->belongsTo(Usuarios::class, 'id_usuario');
     }
 }

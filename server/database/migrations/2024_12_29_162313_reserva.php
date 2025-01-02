@@ -13,8 +13,8 @@ return new class () extends Migration {
             $table->time('hora_inicio');
             $table->time('hora_final');
             $table->enum('estado', ['aceptado', 'rechazado']);
-            $table->foreignId('id_area_comun')->constrained('areas_comunes')->cascadeOnDelete();
-            $table->foreignId('id_copropietario')->constrained('copropietarios')->cascadeOnDelete();
+            $table->foreignId('id_area_comun')->constrained('areas_comunes');
+            $table->foreignId('id_usuario')->constrained('usuarios');
             $table->timestamps();
         });
     }

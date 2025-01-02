@@ -11,7 +11,7 @@ class PagoPropiedad extends Model
     protected $table = 'pagos_propiedades';
 
     protected $fillable = [
-        'id_copropietario',
+        'id_usuario',
         'id_propiedad',
         'id_pago'
     ];
@@ -22,7 +22,7 @@ class PagoPropiedad extends Model
     }
     public function copropietario()
     {
-        $this->belongsTo(Copropietario::class);
+        $this->belongsTo(Usuarios::class, 'id_usuario');
     }
 
     public function pago()

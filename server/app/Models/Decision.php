@@ -10,7 +10,7 @@ class Decision extends Model
     use HasFactory;
     protected $table = 'dicisiones';
     protected $fillable = [
-        'id_directivo',
+        'id_usuario',
         'descripcion',
         'fecha',
         'tipo'
@@ -18,7 +18,7 @@ class Decision extends Model
 
     public function directivo()
     {
-        return $this->belongsTo(Directivo::class, 'id_directivo');
+        return $this->belongsTo(Usuarios::class, 'id_usuario');
     }
 
 }

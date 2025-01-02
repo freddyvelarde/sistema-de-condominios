@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->integer('num_habitaciones');
             $table->enum('estado', ['ocupado', 'mantenimiento', 'desocupado'])->default('desocupado')->nullable();
             $table->enum('tipo', ['vivienda', 'oficina', 'local'])->default('vivienda')->nullable();
-            $table->foreignId('id_copropietario')->nullable()->constrained('copropietarios');
+            $table->foreignId('id_usuario')->nullable()->constrained('usuarios');
             $table->timestamps();
         });
     }

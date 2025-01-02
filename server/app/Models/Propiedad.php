@@ -25,7 +25,7 @@ class Propiedad extends Model
     }
     public function copropietario()
     {
-        return $this->belongsTo(Copropietario::class, 'id_copropietario');
+        return $this->belongsTo(Usuarios::class, 'id_usuario');
     }
     public function visitas()
     {

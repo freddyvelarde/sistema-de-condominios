@@ -16,7 +16,7 @@ class Reserva extends Model
         'hora_final',
         'estado',
         'id_area_comun',
-        'id_copropietario'
+        'id_usuario'
     ];
     public function pagoReserva()
     {
@@ -28,7 +28,7 @@ class Reserva extends Model
     }
     public function copropietario()
     {
-        return $this->belongsTo(Copropietario::class);
+        return $this->belongsTo(Usuarios::class);
     }
 
 }

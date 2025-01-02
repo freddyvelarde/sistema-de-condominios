@@ -9,9 +9,9 @@ return new class () extends Migration {
     {
         Schema::create('pagos_propiedades', function (Blueprint $table) {
             $table->id()->primary();
-            $table->foreignId('id_copropietario')->constrained('copropietarios')->cascadeOnDelete();
-            $table->foreignId('id_propiedad')->constrained('propiedades')->cascadeOnDelete();
-            $table->foreignId('id_pago')->constrained('pagos')->cascadeOnDelete();
+            $table->foreignId('id_usuario')->constrained('usuarios');
+            $table->foreignId('id_propiedad')->constrained('propiedades');
+            $table->foreignId('id_pago')->constrained('pagos');
             $table->timestamps();
         });
     }

@@ -10,12 +10,12 @@ class PagoEmpleado extends Model
     use HasFactory;
     protected $table = 'pagos_empleados';
     protected $fillable = [
-        'id_empleado',
+        'id_usuario',
         'id_pago'
     ];
     public function empleado()
     {
-        return $this->belongsTo(Empleado::class, 'id_empleado');
+        return $this->belongsTo(Usuarios::class, 'id_usuario');
     }
     public function pago()
     {

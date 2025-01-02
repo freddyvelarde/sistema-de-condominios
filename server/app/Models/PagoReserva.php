@@ -11,15 +11,14 @@ class PagoReserva extends Model
     //
     protected $table = 'pagos_reservas';
     protected $fillable = [
-        'id_copropietario',
+        'id_usuario',
         'id_reserva',
         'id_pago'
-
     ];
 
     public function copropietario()
     {
-        $this->belongsTo(Copropietario::class);
+        $this->belongsTo(Usuarios::class);
     }
     public function reserva()
     {

@@ -12,6 +12,7 @@ return new class () extends Migration {
             $table->string('descripcion');
             $table->enum('tipo', ['mantenimiento', 'evento', 'refaccion']);
             $table->date('fecha');
+            $table->foreignId('id_usuario')->constrained('usuarios')->cascadeOnDelete();
             $table->timestamps();
         });
     }

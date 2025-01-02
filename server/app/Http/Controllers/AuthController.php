@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Copropietario;
-use App\Models\DatosUsuario;
-use App\Models\Propietario;
+use App\Models\Usuarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +13,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'password' => 'required|string|min:8',
-            'email' => 'required|string|email|unique:datos_usuarios,email',
+            'email' => 'required|string|email|unique:usuarios,email',
             'nombres' => 'required|string|max:255',
             'apellido_pat' => 'required|string|max:255',
             'apellido_mat' => 'required|string|max:255',
@@ -32,7 +30,7 @@ class AuthController extends Controller
             }
         }
 
-        $user = DatosUsuario::create([
+        $user = Usuarios::create([
             'password' => Hash::make($request->password),
             'email' => $request->email,
             'nombres' => $request->nombres,
@@ -40,36 +38,15 @@ class AuthController extends Controller
             'apellido_mat' => $request->apellido_mat,
             'num_telefono' => $request->num_telefono,
             'rol' => $request->rol,
+            'ci' => $request->ci,
         ]);
-
-
-
-
-
-        if ($user->rol === 'admin') {
-            Propietario::create([
-                'ci' => $request->ci,
-                // 'fecha_nacimiento' => $request->fecha_nacimiento,
-                'id_usuario' => $user->id
-            ]);
-        }
-        if ($user->rol === 'copropietario') {
-            Copropietario::create([
-                'ci' => $request->ci,
-                // 'fecha_nacimiento' => $request->fecha_nacimiento,
-                'id_usuario' => $user->id
-            ]);
-        }
-
-
         $token = Auth::login($user);
-
         return response()->json(['token' => $token, 'user' => $user], 201);
     }
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('ci', 'password');
 
         if (!$token = Auth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -87,8 +64,6 @@ class AuthController extends Controller
     public function me()
     {
         $user = Auth::user();
-
-
 
         return response()->json([$user], 200);
     }

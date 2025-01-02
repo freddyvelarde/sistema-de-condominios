@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Copropietario;
 use App\Models\Propiedad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,25 +17,26 @@ class CopropietarioController extends Controller
         $user = Auth::user();
 
         $propiedad = Propiedad::find($request->id_propiedad);
-        $copropietario = Copropietario::where('id_usuario', $user->id)->first();
+        if (!$propiedad) {
+            return response()->json(['message' => 'Propiedad no encontrada'], 404);
+        }
 
-        if ($propiedad && $copropietario) {
+        if ($propiedad && $user) {
             $propiedad->estado = 'ocupado';
-            $propiedad->copropietario()->associate($copropietario);
+            $propiedad->copropietario()->associate($user);
             $propiedad->save();
         }
 
 
-        return response()->json(['message' => 'Alquiler realizado', 'propiedad' => $propiedad]);
+        return response()->json(['message' => 'Alquiler realizado', 'propiedad' => $propiedad, 'user' => $user]);
     }
 
     public function propiedades()
     {
 
         $user = Auth::user();
-        $copropietario = Copropietario::where('id_usuario', $user->id)->first();
 
-        $propiedades = Propiedad::where('id_copropietario', $copropietario-> id)->get();
+        $propiedades = Propiedad::where('id_usuario', $user-> id)->get();
 
         return response()->json(['propiedades' => $propiedades]);
     }

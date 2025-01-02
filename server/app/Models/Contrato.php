@@ -10,17 +10,17 @@ class Contrato extends Model
     use HasFactory;
     protected $table = 'contratos';
     protected $fillable = [
-
-            'fecha_inicio',
-            'fecha_final',
-            'tipo',
-            'sueldo_base',
-            'cargo',
-            'estado',
-            'id_empleado'
+        'fecha_inicio',
+        'fecha_final',
+        'tipo',
+        'sueldo_base',
+        'cargo',
+        'estado',
+        'id_usuario'
+        // 'ci_usuario'
     ];
     public function empleado()
     {
-        return $this->belongsTo(Empleado::class);
+        return $this->belongsTo(Usuarios::class);
     }
 }
